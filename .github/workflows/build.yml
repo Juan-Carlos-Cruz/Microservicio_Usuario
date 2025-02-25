@@ -1,0 +1,56 @@
+name: Build and SonarQube Analysis
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  analyze-nextjs:
+    name: SonarQube - Next.js (Registro)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Asegura que SonarQube tenga acceso al historial completo
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: |
+          cd registro
+          npm install
+      - name: Run ESLint for Next.js
+        run: |
+          cd registro
+          npm run lint || echo "ESLint warnings detected"
+      - name: SonarQube Scan - Next.js
+        run: |
+          cd registro
+          npx sonarqube-scanner
+
+  analyze-angular:
+    name: SonarQube - Angular (Login)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: |
+          cd login
+          npm install
+      - name: Run ESLint for Angular
+        run: |
+          cd login
+          npm run lint || echo "ESLint warnings detected"
+      - name: SonarQube Scan - Angular
+        run: |
+          cd login
+          npx sonarqube-scanner
