@@ -6,6 +6,10 @@ on:
       - develop_login
       - develop_registro
   pull_request:
+    branches:
+      - main
+      - develop_login
+      - develop_registro
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -29,6 +33,8 @@ jobs:
           cd registro
           npm run lint || echo "ESLint warnings detected"
       - name: SonarQube Scan - Next.js
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd registro
           npx sonarqube-scanner
@@ -53,6 +59,8 @@ jobs:
           cd login
           npm run lint || echo "ESLint warnings detected"
       - name: SonarQube Scan - Angular
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd login
           npx sonarqube-scanner
