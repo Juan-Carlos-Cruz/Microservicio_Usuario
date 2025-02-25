@@ -26,17 +26,17 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: |
-          cd registro
+          cd Registro
           npm install
       - name: Run ESLint for Next.js
         run: |
-          cd registro
+          cd Registro
           npm run lint || echo "ESLint warnings detected"
       - name: SonarQube Scan - Next.js
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd registro
+          cd Registro
           npx sonarqube-scanner
 
   analyze-angular:
@@ -52,15 +52,15 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: |
-          cd login
+          cd Login
           npm install
       - name: Run ESLint for Angular
         run: |
-          cd login
+          cd Login
           npm run lint || echo "ESLint warnings detected"
       - name: SonarQube Scan - Angular
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd login
+          cd Login
           npx sonarqube-scanner
