@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+      - develop_login
+      - develop_registro
   pull_request:
     types: [opened, synchronize, reopened]
 
