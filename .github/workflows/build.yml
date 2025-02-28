@@ -1,9 +1,16 @@
 name: Build and SonarQube Analysis
+
 on:
   push:
     branches:
       - main
+      - develop_login
+      - develop_registro
   pull_request:
+    branches:
+      - main
+      - develop_login
+      - develop_registro
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -11,54 +18,72 @@ jobs:
     name: SonarQube - Next.js (Registro)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Asegura que SonarQube tenga acceso al historial completo
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
       - name: Install dependencies
         run: |
-          cd registro
+          cd Registro
           npm install
+
       - name: Run ESLint for Next.js
         run: |
-          cd registro
+          cd Registro
           npm run lint || echo "ESLint warnings detected"
+
       - name: SonarQube Scan - Next.js
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd registro
-           run: |
-            cd registro
-            npx sonarqube-scanner \
-              -Dsonar.organization=Juan-Carlos-Cruz \
-              -Dsonar.projectKey=Juan-Carlos-Cruz_Registro \
-              -Dsonar.sources=. \
-              -Dsonar.branch.name=${{ github.ref_name }} \
-              -Dsonar.host.url="https://sonarcloud.io" \
-              -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          cd Registro
+          npx sonarqube-scanner \
+            -Dsonar.organization=Juan-Carlos-Cruz \
+            -Dsonar.projectKey=Juan-Carlos-Cruz_Registro \
+            -Dsonar.sources=. \
+            -Dsonar.branch.name=${{ github.ref_name }} \
+            -Dsonar.host.url="https://sonarcloud.io" \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   analyze-angular:
     name: SonarQube - Angular (Login)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
       - name: Install dependencies
         run: |
-          cd login
+          cd Login
           npm install
+
       - name: Run ESLint for Angular
         run: |
-          cd login
+          cd Login
           npm run lint || echo "ESLint warnings detected"
+
       - name: SonarQube Scan - Angular
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd login
-          npx sonarqube-scanner
+          cd Login
+          npx sonarqube-scanner \
+            -Dsonar.organization=Juan-Carlos-Cruz \
+            -Dsonar.projectKey=Juan-Carlos-Cruz_Login \
+            -Dsonar.sources=. \
+            -Dsonar.branch.name=${{ github.ref_name }} \
+            -Dsonar.host.url="https://sonarcloud.io" \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
