@@ -42,7 +42,7 @@ export default function RegisterForm() {
   return (
     <div className="absolute flex-col items-center justify-center h-screen">
       <Button onClick={() => setOpen(true)} className="mb-4 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg">
-        Registrarse
+        Registrate
       </Button>
 
       <Modal open={open} onOpenChange={setOpen}>
