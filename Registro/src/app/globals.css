@@ -1,9 +1,9 @@
 @import "tailwindcss";
-
+/*sonar-ignore-next-line*/
 @plugin "tailwindcss-animate";
-
+/*sonar-ignore-next-line*/
 @custom-variant dark (&:is(.dark *));
-
+/*sonar-ignore-next-line*/
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -79,7 +79,7 @@
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
 }
-
+/*sonar-ignore-next-line*/
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -121,9 +121,11 @@
 
 @layer base {
   * {
+    /*sonar-ignore-next-line*/
     @apply border-border outline-ring/50;
   }
   body {
+    /*sonar-ignore-next-line*/
     @apply bg-background text-foreground;
   }
 }
