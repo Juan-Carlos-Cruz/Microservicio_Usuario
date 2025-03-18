@@ -4,12 +4,14 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --ignore-scripts
 
+
 # Copia solo los archivos relevantes del proyecto, evitando archivos innecesarios
 COPY public ./public
 COPY src ./src
 COPY next.config.js ./
 COPY tsconfig.json ./
 COPY .env ./
+
 
 RUN npm run build
 

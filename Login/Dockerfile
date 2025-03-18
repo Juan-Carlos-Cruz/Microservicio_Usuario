@@ -10,14 +10,13 @@ COPY package.json package-lock.json ./
 # Instala dependencias sin scripts adicionales
 RUN npm install --ignore-scripts
 
-# Copia el resto del código del proyecto
+
 # Copia solo los archivos relevantes del proyecto, evitando archivos innecesarios
 COPY public ./public
 COPY src ./src
 COPY next.config.js ./
 COPY tsconfig.json ./
 COPY .env ./
-
 
 # Construye la aplicación Angular en modo producción
 RUN npm run build -- --configuration=production
