@@ -12,7 +12,7 @@ services:
 
   frontend-login:
     build:
-      context: ./login
+      context: ./Login
       dockerfile: Dockerfile
     ports:
       - "4200:80"
@@ -41,7 +41,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-U", "AJLN"]
       interval: 10s
       retries: 5
 

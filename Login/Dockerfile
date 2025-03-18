@@ -5,13 +5,13 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copia primero solo los archivos de dependencias
-COPY Login/package.json Login/package-lock.json ./
+COPY package.json package-lock.json ./
 
 # Instala dependencias sin scripts adicionales
 RUN npm install --ignore-scripts
 
 # Copia el resto del código del proyecto
-COPY Login ./
+COPY . ./
 
 # Construye la aplicación Angular en modo producción
 RUN npm run build -- --configuration=production
@@ -20,7 +20,7 @@ RUN npm run build -- --configuration=production
 FROM nginx:alpine
 
 # Copia los archivos generados por Angular al servidor Nginx
-COPY --from=builder /app/dist/Login /usr/share/nginx/html
+COPY --from=builder /app/dist/ /usr/share/nginx/html
 
 # Usa el usuario no-root 'nginx' predefinido
 USER nginx
