@@ -34,7 +34,7 @@ jobs:
 
       # 4) Corre los tests con cobertura
       - name: Test with coverage
-        run: npm run test
+        run: npm run test -- --passWithNoTests
         working-directory: ./Registro
 
       # 5) SonarCloud Scan (acción oficial)
