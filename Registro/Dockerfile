@@ -1,33 +1,20 @@
-# Usa la versión LTS de Node.js como base
 FROM node:18-alpine AS builder
-
-# Define la carpeta de trabajo
 WORKDIR /app
 
-# Copia archivos de dependencias primero (package.json y package-lock.json)
-COPY Registro/package.json Registro/package-lock.json ./
-
-# Instala dependencias evitando scripts potencialmente maliciosos
+COPY package.json package-lock.json ./
 RUN npm install --ignore-scripts
 
-# Copia todo el proyecto
-COPY Registro ./
-
-# Construye y exporta la aplicación Next.js
+COPY . ./
 RUN npm run build
-RUN npm run export
 
-# Usa Nginx para servir la versión estática generada
+# Usa directamente la build generada (sin export!)
 FROM nginx:alpine
+COPY --from=builder /app/.next/static /usr/share/nginx/html/_next/static
+COPY --from=builder /app/.next/standalone /usr/share/nginx/html
+COPY --from=builder /app/public /usr/share/nginx/html/public
 
-# Copia los archivos estáticos generados por Next.js
-COPY --from=builder /app/out /usr/share/nginx/html
-
-# Usa el usuario no-root 'nginx' predefinido
+# Configuración del usuario no-root
 USER nginx
 
-# Expón el puerto por defecto
 EXPOSE 80
-
-# Inicia Nginx en primer plano
 CMD ["nginx", "-g", "daemon off;"]
