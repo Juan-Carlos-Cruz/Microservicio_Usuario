@@ -12,7 +12,7 @@ services:
 
   frontend-login:
     build:
-      context: ./login
+      context: ./Login
       dockerfile: Dockerfile
     ports:
       - "4200:80"
