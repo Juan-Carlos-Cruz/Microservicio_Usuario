@@ -4,25 +4,20 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --ignore-scripts
 
-
-# Copia solo los archivos relevantes del proyecto, evitando archivos innecesarios
 COPY public ./public
 COPY src ./src
-COPY next.config.js ./
+COPY next.config.ts ./
 COPY tsconfig.json ./
-COPY .env ./
-
+# ...otros archivos si tu build los necesita
 
 RUN npm run build
 
-# Usa directamente la build generada (sin export!)
-FROM nginx:alpine
-COPY --from=builder /app/.next/static /usr/share/nginx/html/_next/static
-COPY --from=builder /app/.next/standalone /usr/share/nginx/html
-COPY --from=builder /app/public /usr/share/nginx/html/public
+FROM node:18-alpine AS runner
+WORKDIR /app
 
-# Configuración del usuario no-root
-USER nginx
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+CMD ["node", "server.js"]
