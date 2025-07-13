@@ -1,32 +1,28 @@
-# Usa la versión LTS de Node.js como base
+# Etapa de build
 FROM node:18-alpine AS builder
 
-# Define la carpeta de trabajo
 WORKDIR /app
 
-# Copia primero solo los archivos de dependencias
-COPY Login/package.json Login/package-lock.json ./
-
-# Instala dependencias sin scripts adicionales
+# Copia dependencias
+COPY package.json package-lock.json ./
 RUN npm install --ignore-scripts
 
-# Copia el resto del código del proyecto
-COPY Login ./
+# Copia el resto del proyecto (esto incluye angular.json, tsconfig.json, etc)
+COPY . .
 
-# Construye la aplicación Angular en modo producción
+# Compila la app en modo producción
 RUN npm run build -- --configuration=production
 
-# Usa Nginx para servir la versión estática generada
+# Etapa de producción con Nginx
 FROM nginx:alpine
 
-# Copia los archivos generados por Angular al servidor Nginx
-COPY --from=builder /app/dist/Login /usr/share/nginx/html
+# Copia archivos generados al servidor Nginx
+COPY --from=builder /app/dist/login/ /usr/share/nginx/html
 
-# Usa el usuario no-root 'nginx' predefinido
+# ---- FIX DE PERMISOS PARA NGINX ----
+RUN mkdir -p /var/cache/nginx && chown -R nginx:nginx /var/cache/nginx \
+    && mkdir -p /run && chown -R nginx:nginx /run
+
 USER nginx
-
-# Expón el puerto por defecto
 EXPOSE 80
-
-# Inicia Nginx en primer plano
 CMD ["nginx", "-g", "daemon off;"]

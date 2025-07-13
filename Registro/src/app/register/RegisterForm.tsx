@@ -1,93 +1,153 @@
 "use client";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { FcGoogle } from "react-icons/fc";
-import Modal from "@/components/ui/Modal";
-import { registerUser } from "@/services/userService";
+import React, { useState } from "react";
+import styles from "./RegisterModal.module.css";
+import { registerUser } from "@/services/userService"; // Ajusta la ruta según tu proyecto
 
-const registerSchema = z.object({
-  username: z.string().min(3, "El nombre de usuario debe tener al menos 3 caracteres"),
-  email: z.string().email("Correo electrónico inválido"),
-  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Las contraseñas no coinciden",
-  path: ["confirmPassword"],
-});
+export default function RegisterModal() {
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    captcha: false,
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+  // TIPADO para handleChange
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setForm({
+      ...form,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
 
-export default function RegisterForm() {
-  const [open, setOpen] = useState(false);
+  // TIPADO para handleSubmit
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormData>({ resolver: zodResolver(registerSchema) });
-
-  const onSubmit = async (data: RegisterFormData) => {
+    if (!form.captcha) {
+      setError("Por favor verifica que no eres un robot.");
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      setError("Las contraseñas no coinciden.");
+      return;
+    }
+    if (!form.username || !form.email || !form.password) {
+      setError("Por favor completa todos los campos.");
+      return;
+    }
     try {
-      await registerUser(data);
-      setOpen(false);
-    } catch (error) {
-      console.error("Error al registrar usuario", error);
+      await registerUser({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+      });
+      setSuccess("¡Usuario registrado exitosamente!");
+      setForm({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        captcha: false,
+      });
+    } catch (err: unknown) {
+      // TIPADO correcto para err
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("No se pudo registrar el usuario.");
+      }
     }
   };
 
   return (
-    <div className="absolute flex-col items-center justify-center h-screen">
-      <Button onClick={() => setOpen(true)} className="mb-4 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg">
-        Registrate
-      </Button>
-
-      <Modal open={open} onOpenChange={setOpen}>
-        <div 
-          className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-sm sm:max-w-md lg:max-w-lg 
-          max-h-[85vh] overflow-auto border border-gray-700 flex flex-col gap-4"
-          aria-describedby="register-description"
-        >
-          <h2 className="text-xl font-semibold text-center text-white">Regístrate</h2>
-          <p id="register-description" className="text-sm text-gray-400 text-center">
-            Crea una cuenta y únete a XXXL.
-          </p>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-            <Input className="w-full p-3 rounded-md border border-blue-500 bg-gray-900 text-white text-sm" placeholder="Nombre de usuario" {...register("username")} />
-            {errors.username && <p className="text-red-500 text-xs">{errors.username.message}</p>}
-
-            <Input className="w-full p-3 rounded-md border border-blue-500 bg-gray-900 text-white text-sm" placeholder="Correo electrónico" {...register("email")} />
-            {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
-
-            <Input className="w-full p-3 rounded-md border border-blue-500 bg-gray-900 text-white text-sm" type="password" placeholder="Crea una contraseña" {...register("password")} />
-            {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
-
-            <Input className="w-full p-3 rounded-md border border-blue-500 bg-gray-900 text-white text-sm" type="password" placeholder="Confirmar contraseña" {...register("confirmPassword")} />
-            {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword.message}</p>}
-
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md text-sm font-semibold">
-              Crear cuenta
-            </Button>
-          </form>
-
-          <div className="flex items-center my-2">
-            <div className="flex-grow border-t border-gray-600"></div>
-            <span className="px-2 text-gray-400 text-xs">o</span>
-            <div className="flex-grow border-t border-gray-600"></div>
+    <div className={styles.overlay}>
+      <div className={styles.modal}>
+        <button className={styles.closeBtn}>&times;</button>
+        <h2 className={styles.title}>Regístrate</h2>
+        <p className={styles.subtitle}>Crea una cuenta y únete a XXXX.</p>
+        <form onSubmit={handleSubmit}>
+          <input
+            className={styles.input}
+            type="text"
+            name="username"
+            placeholder="Nombre de usuario"
+            required
+            value={form.username}
+            onChange={handleChange}
+          />
+          <input
+            className={styles.input}
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            required
+            value={form.email}
+            onChange={handleChange}
+          />
+          <input
+            className={styles.input}
+            type="password"
+            name="password"
+            placeholder="Crea una contraseña"
+            required
+            value={form.password}
+            onChange={handleChange}
+          />
+          <input
+            className={styles.input}
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirmar contraseña"
+            required
+            value={form.confirmPassword}
+            onChange={handleChange}
+          />
+          <div className={styles.recaptcha}>
+            <input
+              type="checkbox"
+              id="captcha"
+              name="captcha"
+              className={styles.captchaCheckbox}
+              checked={form.captcha}
+              onChange={handleChange}
+            />
+            <label htmlFor="captcha" className={styles.captchaLabel}>
+              I am not a robot
+            </label>
+            <span className={styles.recaptchaError}>
+              {error === "Por favor verifica que no eres un robot." && error}
+            </span>
+            <div className={styles.recaptchaImg}>
+              <img
+                src="https://www.gstatic.com/recaptcha/api2/logo_48.png"
+                alt="reCAPTCHA"
+              />
+            </div>
           </div>
-
-          <Button className="w-full flex items-center justify-center gap-2 border border-gray-600 bg-gray-700 hover:bg-gray-600 text-white p-3 rounded-md text-sm">
-            <FcGoogle className="text-lg" />
-            <span>Regístrate con Google</span>
-          </Button>
-
-          <p className="text-center text-xs text-gray-400">¿Ya tienes una cuenta? <a href="#" className="text-blue-400 hover:underline">Inicia sesión aquí</a></p>
+          {error && error !== "Por favor verifica que no eres un robot." && (
+            <div style={{ color: "red", margin: "8px 0" }}>{error}</div>
+          )}
+          {success && (
+            <div style={{ color: "green", margin: "8px 0" }}>{success}</div>
+          )}
+          <button type="submit" className={styles.mainBtn}>
+            Crear cuenta
+          </button>
+        </form>
+        <div className={styles.googleBtn}>
+          <img src="/google.svg" alt="Google" className={styles.googleLogo} />
+          <span>Sign up with Google</span>
         </div>
-      </Modal>
+        <p className={styles.signin}>
+          ¿Ya tienes una cuenta? <a href="#">Inicia sesión aquí.</a>
+        </p>
+      </div>
     </div>
   );
 }
