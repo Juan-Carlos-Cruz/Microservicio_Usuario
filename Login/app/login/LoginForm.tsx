@@ -80,7 +80,7 @@ export default function LoginModal() {
           </button>
         </form>
         <p className={styles.signup}>
-          ¿No tienes cuenta? <a href="/registro">Regístrate aquí.</a>
+          ¿No tienes cuenta? <a href="http://localhost:3000">Regístrate aquí.</a>
         </p>
       </div>
     </div>
