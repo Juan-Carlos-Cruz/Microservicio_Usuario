@@ -42,7 +42,7 @@ services:
       POSTGRES_PASSWORD: AJLN2025
       POSTGRES_DB: User
     ports:
-      - "5432:5432"
+      - "6543:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql

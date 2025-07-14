@@ -65,3 +65,35 @@ async def get_users():
         return users
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+class LoginUser(BaseModel):
+    email: str
+    password: str
+
+
+@app.post("/login/")
+async def login_user(user: LoginUser):
+    try:
+        # Consulta al usuario y verifica contraseña
+        result = await db.fetch(
+            """
+            SELECT id, username, email 
+            FROM users 
+            WHERE email = $1 AND password = crypt($2, password)
+            """,
+            user.email,
+            user.password
+        )
+
+        if not result:
+            raise HTTPException(status_code=401, detail="Credenciales inválidas")
+
+        return {
+            "message": "Inicio de sesión exitoso",
+            "user": dict(result[0])
+        }
+
+    except HTTPException as http_exc:
+        raise http_exc
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
