@@ -1,10 +1,12 @@
-export async function loginUser(data: { email: string; password: string; }) {
-  const response = await fetch('http://localhost:5000/login/', {
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export async function loginUser(data: { email: string; password: string }) {
+  const response = await fetch(`${API_URL}/login/`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
