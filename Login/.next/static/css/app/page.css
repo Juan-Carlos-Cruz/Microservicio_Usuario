@@ -1,91 +1,152 @@
 /*!***************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[7].use[3]!./app/login/LoginModal.module.css ***!
   \***************************************************************************************************************************************************************************************************************************************************************************/
-.LoginModal_overlay__uWi06 {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+.LoginModal_container__rDz8c {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  z-index: 1000;
-}
-
-.LoginModal_modal__pc0Q0 {
-  background: #2d3748;
-  border-radius: 10px;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
   padding: 20px;
-  width: 100%;
-  max-width: 450px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.LoginModal_closeBtn__hbo8d {
-  float: right;
+.LoginModal_loginBox__mSFcp {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: rgba(27, 18, 21, 0.95); 
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 40px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px); 
+  font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+  font-weight: 500;
+  color: white; 
+  
+}
+
+.LoginModal_loginBox__mSFcp .LoginModal_title__pzSar,
+.LoginModal_loginBox__mSFcp .LoginModal_subtitle__38vWR,
+.LoginModal_loginBox__mSFcp .LoginModal_label__9JGOv,
+.LoginModal_loginBox__mSFcp .LoginModal_input__PVkHR,
+.LoginModal_loginBox__mSFcp .LoginModal_submitBtn__mcehb,
+.LoginModal_loginBox__mSFcp .LoginModal_signupText__IYtNm {
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+.LoginModal_closeButton__o6hyU {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
-  color: white;
+  color: #2c97eb; 
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.LoginModal_closeButton__o6hyU:hover {
+  color: #f74e4a; /* Azul más oscuro al hover */
 }
 
 .LoginModal_title__pzSar {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: white;
+  width: 100%;
+  padding-left: 40px;
 }
 
 .LoginModal_subtitle__38vWR {
-  color: #a0aec0;
-  text-align: center;
-  margin-bottom: 1.5rem;
+  color: white;
+  margin-bottom: 24px;
+  font-size: 12px;
+  width: 100%;
+  padding-left: 40px;
+}
+
+.LoginModal_inputGroup__rGo_X {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.LoginModal_label__9JGOv {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: white;
+  font-size: 14px;
 }
 
 .LoginModal_input__PVkHR {
   width: 100%;
   padding: 12px;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  border: 1px solid #4a5568;
-  background: #1a202c;
+  border: 3px solid #324dd3;
+  border-radius: 12px;
+  font-size: 14px;
+  background-color: rgba(27, 27, 27, .9);
   color: white;
+  margin: 0 auto;
 }
 
-.LoginModal_mainBtn__NJ__P {
-  width: 100%;
-  padding: 12px;
-  border-radius: 5px;
-  background: #4299e1;
+.LoginModal_submitBtn__mcehb {
+  padding: 14px;
+  background-color: #324dd3;
   color: white;
-  font-weight: bold;
-  cursor: pointer;
   border: none;
+  border-radius: 25px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px; /* Espaciado superior */
+  transition: background-color 0.2s;
 }
 
-
-.LoginModal_signup__Ma_6n {
+.LoginModal_signupText__IYtNm {
   text-align: center;
-  margin-top: 1rem;
-  color: #a0aec0;
+  color: white;
+  font-size: 12px;
 }
 
-.LoginModal_signup__Ma_6n a {
-  color: #4299e1;
+.LoginModal_signupLink__lReuT {
+  color: #4285f4;
   text-decoration: none;
+  font-weight: 500;
 }
 
 .LoginModal_error__Pi6VA {
   color: #e53e3e;
   margin: 8px 0;
   text-align: center;
+  font-size: 14px;
 }
 
 .LoginModal_success__fLoOb {
   color: #38a169;
   margin: 8px 0;
   text-align: center;
+  font-size: 14px;
+}
+
+.LoginModal_formContainer__nVkvq {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto; 
+}
+
+.LoginModal_input__PVkHR,
+.LoginModal_submitBtn__mcehb {
+  width: 100%;
+  box-sizing: border-box;
 }

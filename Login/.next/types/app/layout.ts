@@ -1,4 +1,4 @@
-// File: E:\U\Desarrollo III\Microservicio_Usuario\Login\app\layout.tsx
+// File: C:\Users\Laura\OneDrive\Documentos\GitHub\Microservicio_Usuario\Login\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

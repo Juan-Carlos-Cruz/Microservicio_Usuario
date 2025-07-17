@@ -10,6 +10,7 @@ export default function LoginModal() {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,39 +49,61 @@ export default function LoginModal() {
     }
   };
 
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  if (!isVisible) return null;
+
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
-        <button className={styles.closeBtn}>&times;</button>
-        <h2 className={styles.title}>Inicia Sesión</h2>
-        <p className={styles.subtitle}>Accede a tu cuenta en XXXX.</p>
-        <form onSubmit={handleSubmit}>
-          <input
-            className={styles.input}
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            required
-            value={form.email}
-            onChange={handleChange}
-          />
-          <input
-            className={styles.input}
-            type="password"
-            name="password"
-            placeholder="Contraseña"
-            required
-            value={form.password}
-            onChange={handleChange}
-          />
+    <div className={styles.container}>
+      <div className={styles.loginBox}>
+        <button 
+          className={styles.closeButton}
+          onClick={handleClose}
+          aria-label="Cerrar modal"
+        >
+          &times;
+        </button>
+
+        <h1 className={styles.title}>Iniciar Sesión</h1>
+        <p className={styles.subtitle}>Inicia sesión con tu cuenta de <strong>XXXX</strong></p>
+        
+        <form onSubmit={handleSubmit} className={styles.formContainer}>
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Usuario o Correo electrónico</label>
+            <input
+              className={styles.input}
+              type="email"
+              name="email"
+              required
+              value={form.email}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className={styles.inputGroup}>
+            <label className={styles.label}>Contraseña</label>
+            <input
+              className={styles.input}
+              type="password"
+              name="password"
+              required
+              value={form.password}
+              onChange={handleChange}
+            />
+          </div>
+          
           {error && <div className={styles.error}>{error}</div>}
           {success && <div className={styles.success}>{success}</div>}
-          <button type="submit" className={styles.mainBtn}>
+          
+          <button type="submit" className={styles.submitBtn}>
             Iniciar Sesión
           </button>
         </form>
-        <p className={styles.signup}>
-          ¿No tienes cuenta? <a href="http://localhost:3000">Regístrate aquí.</a>
+        
+        <p className={styles.signupText}>
+          ¿No tienes una cuenta? <a href="http://localhost:3000">Regístrate aquí.</a>
         </p>
       </div>
     </div>
